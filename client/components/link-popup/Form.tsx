@@ -1,6 +1,13 @@
-import React from 'react';
 
-export const Form = ({ onSubmit, onSubmitSample, mySQLButton }) => {
+import React from "react";
+
+interface FormProps {
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  onSubmitSample: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  mySQLButton: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export const Form: React.FC<FormProps> = ({ onSubmit, onSubmitSample, mySQLButton }) => {
   return (
     <div>
       <form onSubmit={onSubmit}>

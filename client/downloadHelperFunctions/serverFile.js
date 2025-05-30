@@ -1,4 +1,4 @@
-function serverFile() {
+export function serverFile() {
   const serverInfo = `const express = require('express');
 const expressGraphQL = require('express-graphql');
 require('dotenv').config();
@@ -23,7 +23,3 @@ app.listen(PORT, () => {
 
   return serverInfo;
 }
-
-module.exports = {
-  serverFile,
-};

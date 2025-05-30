@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require('graphql-tools');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
 const db = require('./connectToDB');
 
 const typeDefs = `

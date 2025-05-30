@@ -17,7 +17,8 @@
     // Import non-ES modules as default imports.
     "esModuleInterop": true,
     // use typescript to transpile jsx to js
-    "jsx": "react",
+        "jsx": "react-jsx",
+    // Enable source maps for debugging.
     "baseUrl": "./client",
     "lib": ["es2015", "dom.iterable", "es2016.array.include", "es2017.object", "dom"],
     "module": "es6",
@@ -31,16 +32,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true
+    "importHelpers": true,
   }
 }
-// {
-//     "compilerOptions": {
-//         "target": "es5",
-//         "jsx": "react",
-//         "module": "es2015"
-//     },
-//     "exclude": [
-//         "build"
-//     ]
-// }

@@ -1,8 +1,5 @@
-import Graph from 'react-graph-vis';
-import React, { Component, useEffect, useState } from 'react';
-import { atom, selector, useRecoilValue, useRecoilState } from 'recoil';
+import React, { useEffect, useState } from 'react';
 import createGraph from '../UI';
-import { state } from '../App';
 
 const options = {
   edges: {
@@ -11,18 +8,14 @@ const options = {
       middle: { enabled: false, scaleFactor: 1 },
       from: { enabled: false, scaleFactor: 1 },
     },
-    color: {
-      // color: 'black',
-    },
+    color: {},
     smooth: false,
   },
   nodes: {
     borderWidth: 1,
     borderWidthSelected: 2,
     shape: 'circle',
-    color: {
-      border: 'black',
-    },
+    color: { border: 'black' },
     font: {
       color: 'white',
       size: 10,
@@ -51,42 +44,60 @@ const options = {
 
 const style = {
   display: 'flex',
-  width: '100rem',
-  height: '70rem',
+  width: '100%',
+  height: '100%',
 };
 
-const VisGraph: React.FC = () => {
+interface VisGraphProps {
+  data: AppState;
+  setData: React.Dispatch<React.SetStateAction<AppState>>;
+}
+
+const VisGraph: React.FC<VisGraphProps> = ({ data }) => {
   const [fetched, setFetched] = useState(false);
-  const [graph, setGraph] = useState({});
-  const [data, setData] = useRecoilState(state);
-
-  const getData = () => {
-    fetch('/db/pg/sdl', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({ uri: data.link }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setGraph(createGraph(response.d3Data));
-        setFetched(true);
-      });
-  };
+  const [graph, setGraph] = useState<any>(null);
 
   useEffect(() => {
-    getData();
-  }, [data]);
+    if (!data.link) {
+      setFetched(false);
+      setGraph(null);
+      return;
+    }
+    fetch('/db/pg/sdl', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uri: data.link }),
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Failed to fetch graph data');
+        let json = null;
+        try {
+          json = await response.json();
+        } catch {
+          json = null;
+        }
+        return json;
+      })
+      .then((response) => {
+        if (response && response.d3Data) {
+          setGraph(createGraph(response.d3Data));
+          setFetched(true);
+        } else {
+          setFetched(false);
+        }
+      })
+      .catch(() => {
+        setFetched(false);
+      });
+  }, [data.link]);
 
-  if (fetched) {
+  if (fetched && graph) {
     return (
-      <div>
+      <div style={{ width: '100%', height: '100%' }}>
         <Graph className="graph" graph={graph} options={options} style={style} />
       </div>
     );
-  } else if (!fetched) {
+  } else {
     return (
       <div className="empty-graph">
         <p>Please enter URI to display GraphQL endpoints...</p>

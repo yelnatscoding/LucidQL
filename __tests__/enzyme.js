@@ -4,10 +4,10 @@ import Adapter from 'enzyme-adapter-react-16';
 import { RecoilRoot } from 'recoil';
 
 // import toJson from 'enzyme-to-json';
-import TopNav from '../client/components/nav-bars/TopNav';
+import TopNav from '../client/components/navbar/TopNav';
 import App from '../client/App';
 import Modal from '../client/components/link-popup/Modal.tsx';
-import Footer from '../client/components/nav-bars/Footer.tsx';
+import Footer from '../client/components/footer/Footer';
 import Form from '../client/components/link-popup/Form.tsx';
 
 configure({ adapter: new Adapter() });

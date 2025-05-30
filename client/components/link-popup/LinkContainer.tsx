@@ -1,32 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { state } from '../../App';
-import { useRecoilState } from 'recoil';
+import React, { useEffect } from 'react';
 import { Modal } from './Modal';
 import 'regenerator-runtime/runtime';
 
-const LinkContainer: React.FC = () => {
-  const [data, setData] = useRecoilState(state);
+interface LinkContainerProps {
+  data: AppState;
+  setData: React.Dispatch<React.SetStateAction<AppState>>;
+}
 
+const LinkContainer: React.FC<LinkContainerProps> = ({ data, setData }) => {
   useEffect(() => {
     toggleScrollLock();
   }, [data]);
 
-  const fetchSchemaPG = (link) => {
+  const fetchSchemaPG = (uri) => {
     fetch('/db/pg/sdl', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uri: link }),
+      body: JSON.stringify({ uri: uri }),
     })
-      .then((response) => response.json())
+      .then(async (response) => {
+          let json = null;
+        try {
+          json = await response.json();
+        } catch {
+          json = null;
+        }
+        return json;
+      })
       .then((response) => {
-        setData({ ...data, link: link, modal: false, schema: response.schema, tables: response.tables });
+        setData({ ...data, link: uri, modal: false, schema: response.schema, tables: response.tables });
       });
   };
 
   const onSubmit = async (event) => {
     event.preventDefault(event);
+    console.log('onSubmit', event.target.link.value);
     if (event.target.link.value.trim() !== '') {
       fetchSchemaPG(event.target.link.value);
     }
@@ -63,14 +73,14 @@ const LinkContainer: React.FC = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        uri: 'postgres://ordddiou:g5OjOyAIFxf-tsLk1uwu4ZOfbJfiCFbh@ruby.db.elephantsql.com:5432/ordddiou',
+        uri: 'postgres://koyeb-adm:npg_eC3dP6qlZIbU@ep-broad-fog-a2tpr30m.eu-central-1.pg.koyeb.app/koyebdb',
       }),
     })
       .then((response) => response.json())
       .then((response) => {
         setData({
           ...data,
-          link: 'postgres://ordddiou:g5OjOyAIFxf-tsLk1uwu4ZOfbJfiCFbh@ruby.db.elephantsql.com:5432/ordddiou',
+          link: 'postgres://koyeb-adm:npg_eC3dP6qlZIbU@ep-broad-fog-a2tpr30m.eu-central-1.pg.koyeb.app/koyebdb',
           modal: false,
           schema: response.schema,
           tables: response.tables,

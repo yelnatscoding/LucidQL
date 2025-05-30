@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
-const expressGraphQL = require('express-graphql');
+const { graphqlHTTP } = require('express-graphql');
 const expressPlayground = require('graphql-playground-middleware-express').default;
 const pgRouter = require('./routes/pgRoute');
 const mySQLRouter = require('./routes/mySQLRoute');
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.use(
   '/graphql',
-  expressGraphQL({
+  graphqlHTTP({
     schema,
   })
 );

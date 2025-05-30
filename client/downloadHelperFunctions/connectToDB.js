@@ -1,6 +1,6 @@
-function connectToDB(uri) {
+export function connectToDB(link) {
   const dbConnection = `const {Pool} = require('pg');
-const PG_URI = '${uri.trim()}';
+const PG_URI = '${link.trim()}';
 
 const pool = new Pool({
     connectionString: PG_URI
@@ -15,7 +15,3 @@ module.exports = {
   `;
   return dbConnection;
 }
-
-module.exports = {
-  connectToDB,
-};

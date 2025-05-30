@@ -10,16 +10,33 @@ const pgController = {};
 
 // Middleware function for recovering info from pg tables
 pgController.getPGTables = (req, res, next) => {
-  const db = new Pool({ connectionString: req.body.uri.trim() });
+  const db = new Pool({
+    connectionString: req.body.uri.trim(),
+    ssl: { rejectUnauthorized: false }
+  });
+  console.log('res.locals.uri', req.body.uri.trim());
 
   db.query(pgQuery)
     .then((data) => {
+      if (!data.rows.length || !data.rows[0].tables) {
+        // No tables found
+        return next({
+          status: 404,
+          message: { err: 'No tables found in database.' },
+        });
+      }
       res.locals.tables = data.rows[0].tables;
+      db.end(); // Clean up the pool
       return next();
     })
-    .catch((err) => res.json('error'));
-
-  console.log(req.body.uri);
+    .catch((err) => {
+      db.end();
+      return next({
+        log: err,
+        status: 500,
+        message: { err: 'Error querying Postgres database.' },
+      });
+    });
 };
 
 // Middleware function for assembling SDL schema

@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from './Form';
 import { FormMySQL } from './FormMySQL';
-import FocusTrap from 'focus-trap-react';
+import { FocusTrap } from 'focus-trap-react';
 
-export const Modal: React.FC = ({ onSubmit, onSubmitMySQL, closeModal, onSubmitSample }) => {
+interface ModalProps {
+  onSubmit: (data: any) => void;
+  onSubmitMySQL: (data: any) => void;
+  closeModal: () => void;
+  onSubmitSample: (data: any) => void;
+}
+
+export const Modal: React.FC<ModalProps> = ({ onSubmit, onSubmitMySQL, closeModal, onSubmitSample }) => {
   const [modalState, setModalState] = useState('postgres');
 
   const mySQLButton = () => {

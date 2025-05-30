@@ -216,51 +216,46 @@ div.tooltip {
 /* ---SIDEBAR---- */
 
 .sidebar {
-  height: 100%;
-  width: 0;
+  height: 100vh;
+  width: 250px;
   position: fixed;
-  z-index: 1;
-  top: 0;
   left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
+  top: 0;
+  background-color: #232629;
+  color: #ccc;
   padding-top: 60px;
+  transition: width 0.3s;
+  overflow-x: hidden;
+  z-index: 3;
+}
+
+.sidebar[style*="width: 0"] {
+  padding-top: 0;
+  border: none;
 }
 
 .sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
   display: block;
-  transition: 0.3s;
+  color: #ccc;
+  padding: 16px 24px;
+  text-decoration: none;
+  font-size: 1.25rem;
+  transition: background 0.2s, color 0.2s;
 }
 
 .sidebar a:hover {
-  color: #f1f1f1;
+  background: #444;
+  color: #fff;
 }
 
-.sidebar .closebtn {
+.closebtn {
   position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-.openbtn {
-  font-size: 20px;
+  top: 10px;
+  right: 20px;
+  font-size: 2rem;
+  color: #ccc;
+  text-decoration: none;
   cursor: pointer;
-  color: black;
-  padding: 10px 15px;
-  border: none;
-  margin: auto;
-  /* margin-top: 20px; */
-}
-
-.openbtn:hover {
-  background-color: #444;
 }
 
 #main {
@@ -297,4 +292,76 @@ div.tooltip {
 
 hr {
   background-color: rgb(211, 211, 211);
+}
+
+.app-flex-container {
+  display: flex;
+  height: calc(100vh - 60px); /* adjust if your navbar is a different height */
+}
+
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  background-color: #232629;
+  color: #ccc;
+  transition: width 0.3s;
+  overflow-x: hidden;
+  z-index: 1;
+  height: 100%;
+  position: relative; /* not fixed */
+}
+
+.page-content-wrapper {
+  flex: 1;
+  background: #fff;
+  padding: 24px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* Added properties */
+  height: calc(100vh - 48px); /* Full height minus footer */
+  overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.main-content-row {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 60px); /* Adjust 60px to your navbar height */
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+/* --- New styles --- */
+.app-main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+footer, .footer {
+  /* Ensure the footer is visible and styled */
+  height: 48px; /* or your preferred height */
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+}
+
+.app-main-content, .page-content-wrapper, .main-content-row {
+  min-width: 0;
+  min-height: 0;
+}
+
+.main-content-row {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden; /* Prevents children from overflowing */
+}
+
+.main-content-row > * {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto; /* Allows scrolling if content is too large */
 }
